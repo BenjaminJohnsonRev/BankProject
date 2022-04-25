@@ -4,7 +4,7 @@ import org.example.entity.Account;
 
 import java.util.List;
 
-public interface AccountDao {
+public interface AccApplicationsDao {
     public void insert(Account account);
     public Account getAccountById(int id);
     public Account getAccountByNumber(int number);

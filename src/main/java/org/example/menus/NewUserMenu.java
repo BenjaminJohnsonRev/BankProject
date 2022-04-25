@@ -1,4 +1,4 @@
-package org.example.services;
+package org.example.menus;
 
 public class NewUserMenu {
     public void newUserMenu(){

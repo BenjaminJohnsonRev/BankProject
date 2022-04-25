@@ -9,11 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDaoImpl implements AccountDao{
+public class AccApplicationsDaoImpl implements AccApplicationsDao{
 
     Connection connection;
 
-    public AccountDaoImpl() {
+    public AccApplicationsDaoImpl() {
         // when we instantiate this class, we get the connection
         connection = ConnectionFactory.getConnection();
     }
@@ -62,7 +62,7 @@ public class AccountDaoImpl implements AccountDao{
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setString(1, username);
+            preparedStatement.setInt(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             // checking, do we have a account from this query
             if (resultSet.next()) {
@@ -196,5 +196,4 @@ public class AccountDaoImpl implements AccountDao{
 
 
     }
-
 }

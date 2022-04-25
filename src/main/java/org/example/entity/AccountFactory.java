@@ -1,22 +1,32 @@
 package org.example.entity;
 
+import org.example.dao.AccApplicationsDao;
+import org.example.dao.AccountDao;
+import org.example.dao.DaoFactory;
+
 import java.util.Scanner;
 
 public class AccountFactory {
 
-    public static Account makeNewAccount(boolean employeeStatus){
+    public static void makeNewAccount(boolean application){
         Scanner scanner = new Scanner(System.in);
-        String username = scanner.nextLine();
-        System.out.println("Enter new username: ");
-        String password = scanner.nextLine();
-        System.out.println("Enter new password: ");
-        String passwordConfirm = scanner.nextLine();
-        System.out.println("Confirm new password: ");
-        if(password.equals(passwordConfirm)){
+        String accUsername = scanner.nextLine();
+        System.out.println("Enter name of account owner: ");
+        int accountId = scanner.nextInt();
+        System.out.println("Enter the new account number: ");
+        double balance = scanner.nextDouble();
+        System.out.println("Enter starting balance of the account: ");
 
-            Account account = new Account();
+        Account account = new Account(accUsername, accountId, balance);
 
+        if(application){
+            AccApplicationsDao accApplicationsDao = DaoFactory.getAccApplicationsDao();
+            accApplicationsDao.insert(account);
+            System.out.println("New account application successfully created! It must be approved first.");
+        } else {
+            AccountDao accountDao = DaoFactory.getAccountDao();
+            accountDao.insert(account);
+            System.out.println("New account successfully created!.");
         }
-        System.out.println("New account successfully created! Log in to access account.");
     }
 }

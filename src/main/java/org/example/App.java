@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.menus.InitialMenu;
+import org.example.menus.Menu;
 import org.example.services.Login;
 
 /**
@@ -10,8 +12,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        Login login = new Login();
+        Menu menu = new InitialMenu();
 
-        System.out.println( "Login successful!" );
     }
 }

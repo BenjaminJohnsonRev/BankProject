@@ -2,32 +2,31 @@ package org.example.entity;
 
 public class Account {
 
-    int accountId;
-    double balance;
-    int userId;
+    String accUsername;
     int accountNumber;
+    double balance;
 
-    public Account(int accountId, double balance, int userId, int accountNumber) {
-        this.accountId = accountId;
-        this.balance = balance;
-        this.userId = userId;
+
+    public Account(String accUsername, int accountNumber, double balance) {
+        this.accUsername = accUsername;
         this.accountNumber = accountNumber;
+        this.balance = balance;
     }
 
-    public Account(int userId) {
-        this.userId = userId;
+    public String getAccUsername() {
+        return accUsername;
     }
 
-
-
-
-    //getters and setters
-    public int getAccountId() {
-        return accountId;
+    public void setAccUsername(String accUsername) {
+        this.accUsername = accUsername;
     }
 
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public double getBalance() {
@@ -38,20 +37,12 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     @Override
     public String toString() {
         return "Account{" +
-                "accountId=" + accountId +
+                "AccUsername='" + accUsername + '\'' +
+                ", accountNumber=" + accountNumber +
                 ", balance=" + balance +
-                ", userId=" + userId +
                 '}';
     }
 }
