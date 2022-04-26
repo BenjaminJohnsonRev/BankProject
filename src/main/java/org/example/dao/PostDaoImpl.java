@@ -1,6 +1,8 @@
 package org.example.dao;
 
 import org.example.entity.Account;
+import org.example.entity.Customer;
+import org.example.entity.Post;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,19 +11,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDaoImpl implements AccountDao{
-
+public class PostDaoImpl implements PostDao{
     Connection connection;
 
-    public AccountDaoImpl() {
+    public PostDaoImpl() {
         // when we instantiate this class, we get the connection
         connection = ConnectionFactory.getConnection();
     }
 
     @Override
-    public void insert(Account account) {
+    public void insert(Post post) {
         // question marks are placeholders for the real values:
-        String sql = "insert into account (username, accountid, balance) values (?, ?, ?);";
+        String sql = "insert into account (id, accountid1, accountid2, transfer) values (DEFAULT, ?, ?, ?);";
 
         try {
             // if anything goes wrong here, we will catch the exception:
@@ -30,9 +31,9 @@ public class AccountDaoImpl implements AccountDao{
             // that returns the generated keys (id)
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // fill in the values with the data from our account object:
-            preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setInt(2, account.getAccountNumber());
-            preparedStatement.setDouble(3, account.getBalance());
+            preparedStatement.setInt(1, post.getAccountid1());
+            preparedStatement.setInt(2, post.getAccountid2());
+            preparedStatement.setDouble(3, post.getTransfer());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
             int count = preparedStatement.executeUpdate();
@@ -82,18 +83,18 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public Account getAccountByNumber(int number) {
+    public Post getPostByAccountid2(int accountid2) {
         String sql = "select * from account where accountid = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setInt(1, number);
+            preparedStatement.setInt(1, accountid2);
             ResultSet resultSet = preparedStatement.executeQuery();
             // checking, do we have a account from this query
             if (resultSet.next()) {
                 // extract out the data
-                Account account = getAccount(resultSet);
-                return account;
+                Post post = getPost(resultSet);
+                return post;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,13 +123,57 @@ public class AccountDaoImpl implements AccountDao{
         return accounts;
     }
 
-    // get account from a result set:
-    public Account getAccount(ResultSet resultSet) {
+    @Override
+    public List<Post> getAllPosts() {
+        // create a list of customers to store our results:
+        List<Post> posts = new ArrayList<>();
+        String sql = "select * from post;";
         try {
-            String username = resultSet.getString("username");
-            int accountNumber = resultSet.getInt("accountid");
-            double balance= resultSet.getDouble("balance");
-            return new Account(username, accountNumber, balance);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            // we don't need to set any parameters because we're getting all customers:
+            ResultSet resultSet = preparedStatement.executeQuery();
+            // we use a while loop because there are multiple results:
+            while(resultSet.next()) {
+                Post post = getPost(resultSet);
+                // add customer to list of customers
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
+    @Override
+    public List<Post> getAllPostsForAccount(int accountid2) {
+        // create a list of customers to store our results:
+        List<Post> posts = new ArrayList<>();
+        String sql = "select * from post where accountid2 = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            // set the id using the id that we passed in:
+            preparedStatement.setInt(1, accountid2);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            // we use a while loop because there are multiple results:
+            while(resultSet.next()) {
+                Post post = getPost(resultSet);
+                // add customer to list of customers
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
+    // get account from a result set:
+    public Post getPost(ResultSet resultSet) {
+        try {
+            int id = resultSet.getInt("id");
+            int accountid1 = resultSet.getInt("accountid1");
+            int accountid2= resultSet.getInt("accountid2");
+            double transfer = resultSet.getDouble("transfer");
+            return new Post(accountid1, accountid2, transfer);
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -172,5 +217,4 @@ public class AccountDaoImpl implements AccountDao{
 
 
     }
-
 }

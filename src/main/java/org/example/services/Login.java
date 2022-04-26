@@ -6,6 +6,7 @@ import org.example.dao.CustomerDao;
 import org.example.dao.EmployeeDao;
 import org.example.entity.Customer;
 import org.example.entity.Employee;
+import org.example.entity.User;
 import org.example.menus.CustomerMenu;
 import org.example.menus.EmployeeMenu;
 import org.example.menus.InitialMenu;
@@ -38,13 +39,15 @@ public class Login {
 
         if(validLogin){
             if(employeeCheck){
-                employeeMenu.menu();
+                User employee = new Employee(username, password);
+                employeeMenu.menu(employee);
             } else{
-                customerMenu.menu();
+                User customer = new Customer(username, password);
+                customerMenu.menu(customer);
             }
         } else {
 
-            initialMenu.menu();
+            initialMenu.iMenu();
         }
     }
 

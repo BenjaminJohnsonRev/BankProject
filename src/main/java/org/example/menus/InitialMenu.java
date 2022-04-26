@@ -7,8 +7,8 @@ import java.util.Scanner;
 
 import static org.example.entity.UserFactory.makeNewUser;
 
-public class InitialMenu implements Menu {
-    public void menu(){
+public class InitialMenu{
+    public void iMenu(){
         Login login = new Login();
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();

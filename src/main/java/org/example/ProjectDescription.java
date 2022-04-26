@@ -3,7 +3,7 @@ package org.example;
 public class ProjectDescription {
 
     //Next TODO
-    //Finish userId check, move to customer services
+    //Create logs, create tests (including dummy tables that auto create/delete themselves), incorporate stored procedure, finish user functions
 
 
 

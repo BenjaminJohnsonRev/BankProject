@@ -1,5 +1,7 @@
 package org.example.menus;
 
+import org.example.entity.User;
+
 public interface Menu {
-    public void menu();
+    public void menu(User user);
 }
