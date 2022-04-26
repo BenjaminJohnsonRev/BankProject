@@ -8,6 +8,5 @@ public interface EmployeeDao {
     public void insert(Employee employee);
     public Employee getEmployeeByUsername(String username);
     public List<Employee> getAllEmployees();
-    public void update(Employee employee);
-    public void delete(int id);
+    public void delete(String username);
 }

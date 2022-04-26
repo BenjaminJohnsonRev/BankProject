@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDaoImpl extends EmployeeDao{
+public class EmployeeDaoImpl implements EmployeeDao {
 
     Connection connection;
 
@@ -58,7 +58,7 @@ public class EmployeeDaoImpl extends EmployeeDao{
 
     @Override
     public Employee getEmployeeByUsername(String username) {
-        String sql = "select * from employee where id = ?;";
+        String sql = "select * from employee where username = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
@@ -115,29 +115,11 @@ public class EmployeeDaoImpl extends EmployeeDao{
     }
 
     @Override
-    public void update(Employee employee) {
-        String sql = "update employee set name = ?, author = ?, description = ?, year = ? where id = ?;";
+    public void delete(String username){
+        String sql = "delete from employee where username = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, employee.getName());
-            preparedStatement.setString(2, employee.getAuthor());
-            preparedStatement.setString(3, employee.getDescription());
-            preparedStatement.setInt(4, employee.getYear());
-            preparedStatement.setInt(5, employee.getId());
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) System.out.println("Update successful!");
-            else System.out.println("Something went wrong with the update!");
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int id){
-        String sql = "delete from employee where id = ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setString(1, username);
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
                 System.out.println("Deletion successful!");

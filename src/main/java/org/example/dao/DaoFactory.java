@@ -7,6 +7,7 @@ public class DaoFactory {
     private static EmployeeDao employeeDao;
     private static AccApplicationsDao accApplicationsDao;
     private static PostDao postDao;
+    private static LogsDao logsDao;
 
     // private constructor, intentionally disallow instantiation of this class:
     private DaoFactory() {}
@@ -44,6 +45,13 @@ public class DaoFactory {
             postDao = new PostDaoImpl();
         }
         return postDao;
+    }
+
+    public static LogsDao getLogsDao() {
+        if (logsDao == null) {
+            logsDao = new LogsDaoImpl();
+        }
+        return logsDao;
     }
 
 }

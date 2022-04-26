@@ -21,7 +21,7 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
     @Override
     public void insert(Account account) {
         // question marks are placeholders for the real values:
-        String sql = "insert into account (username, accountNumber, balance) values (?, ?, ?);";
+        String sql = "insert into accapplications (username, accountid, balance) values (?, DEFAULT, ?);";
 
         try {
             // if anything goes wrong here, we will catch the exception:
@@ -30,14 +30,13 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
             // that returns the generated keys (id)
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // fill in the values with the data from our account object:
-            preparedStatement.setString(1, account.getAccUsername();
-            preparedStatement.setInt(2, account.getAccountNumber();
-            preparedStatement.setDouble(3, account.getBalance();
+            preparedStatement.setString(1, account.getAccUsername());
+            preparedStatement.setDouble(3, account.getBalance());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
-                System.out.println("account added successfully!");
+                System.out.println("application added successfully!");
                 // first, we get the result set
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 // increment to the first element of the result set
@@ -58,11 +57,11 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
 
     @Override
     public Account getAccountByName(String username) {
-        String sql = "select * from account where id = ?;";
+        String sql = "select * from accapplications where username = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setInt(1, username);
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             // checking, do we have a account from this query
             if (resultSet.next()) {
@@ -83,7 +82,7 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
 
     @Override
     public Account getAccountByNumber(int number) {
-        String sql = "select * from account where id = ?;";
+        String sql = "select * from accapplications where accountid = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
@@ -102,30 +101,10 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
     }
 
     @Override
-    public Account getAccountById(int id) {
-        String sql = "select * from account where id = ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // set the id using the id that we passed in:
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            // checking, do we have an account from this query
-            if (resultSet.next()) {
-                // extract out the data
-                Account account = getAccount(resultSet);
-                return account;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public List<Account> getAllAccounts() {
         // create a list of accounts to store our results:
         List<Account> accounts = new ArrayList<>();
-        String sql = "select * from account;";
+        String sql = "select * from accapplications;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // we don't need to set any parameters because we're getting all accounts:
@@ -145,12 +124,10 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
     // get account from a result set:
     public Account getAccount(ResultSet resultSet) {
         try {
-            int idData = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            String author = resultSet.getString("author");
-            String description = resultSet.getString("description");
-            int year = resultSet.getInt("year");
-            return new Account(idData, name, author, description, year);
+            String username = resultSet.getString("username");
+            int accountNumber = resultSet.getInt("accountid");
+            double balance= resultSet.getDouble("balance");
+            return new Account(username, accountNumber, balance);
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -158,29 +135,11 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
     }
 
     @Override
-    public void update(Account account) {
-        String sql = "update account set name = ?, author = ?, description = ?, year = ? where id = ?;";
+    public void delete(int accountid){
+        String sql = "delete from account where accountid = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, account.getName());
-            preparedStatement.setString(2, account.getAuthor());
-            preparedStatement.setString(3, account.getDescription());
-            preparedStatement.setInt(4, account.getYear());
-            preparedStatement.setInt(5, account.getId());
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) System.out.println("Update successful!");
-            else System.out.println("Something went wrong with the update!");
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int id){
-        String sql = "delete from account where id = ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1,accountid);
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
                 System.out.println("Deletion successful!");

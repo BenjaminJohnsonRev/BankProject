@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class Customer implements User {
 
-    String username;
-    String password;
-    int userId;
+    private String username;
+    private String password;
+    private int userId;
 
     boolean employeeStatus = false;
 

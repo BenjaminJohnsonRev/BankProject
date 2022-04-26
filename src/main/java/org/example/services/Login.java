@@ -39,15 +39,11 @@ public class Login {
 
         if(validLogin){
             if(employeeCheck){
-                User employee = new Employee(username, password);
-                employeeMenu.menu(employee);
+                employeeMenu.menu();
             } else{
                 User customer = new Customer(username, password);
                 customerMenu.menu(customer);
             }
-        } else {
-
-            initialMenu.iMenu();
         }
     }
 

@@ -58,23 +58,18 @@ public class PostDaoImpl implements PostDao{
     }
 
     @Override
-    public Account getAccountByName(String username) {
-        String sql = "select * from account where username = ?;";
+    public Post getPostById(int id) {
+        String sql = "select * from account where id = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setString(1, username);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             // checking, do we have a account from this query
             if (resultSet.next()) {
                 // extract out the data
-                Account account = getAccount(resultSet);
-                // probably don't need this conditional:
-//                if(idData != id) {
-//                    System.out.println("Something went wrong here. Id's don't match!");
-//                    return null;
-//                }
-                return account;
+                Post post = getPost(resultSet);
+                return post;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,26 +97,6 @@ public class PostDaoImpl implements PostDao{
         return null;
     }
 
-    @Override
-    public List<Account> getAllAccounts() {
-        // create a list of accounts to store our results:
-        List<Account> accounts = new ArrayList<>();
-        String sql = "select * from account;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // we don't need to set any parameters because we're getting all accounts:
-            ResultSet resultSet = preparedStatement.executeQuery();
-            // we use a while loop because there are multiple results:
-            while(resultSet.next()) {
-                Account account = getAccount(resultSet);
-                // add account to list of accounts
-                accounts.add(account);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return accounts;
-    }
 
     @Override
     public List<Post> getAllPosts() {
@@ -181,27 +156,11 @@ public class PostDaoImpl implements PostDao{
     }
 
     @Override
-    public void update(Account account) {
-        String sql = "update account set username = ?, accountid = ?, balance = ?;";
+    public void delete(int id){
+        String sql = "delete from account where id = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setInt(2, account.getAccountNumber());
-            preparedStatement.setDouble(3, account.getBalance());
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) System.out.println("Update successful!");
-            else System.out.println("Something went wrong with the update!");
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int accountid){
-        String sql = "delete from account where accountid = ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,accountid);
+            preparedStatement.setInt(1,id);
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
                 System.out.println("Deletion successful!");
@@ -213,8 +172,5 @@ public class PostDaoImpl implements PostDao{
         catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
     }
 }

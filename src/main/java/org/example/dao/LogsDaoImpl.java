@@ -1,6 +1,6 @@
 package org.example.dao;
 
-import org.example.entity.Account;
+import org.example.entity.Logs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,19 +9,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDaoImpl implements AccountDao{
+public class LogsDaoImpl implements LogsDao{
 
     Connection connection;
 
-    public AccountDaoImpl() {
+    public LogsDaoImpl() {
         // when we instantiate this class, we get the connection
         connection = ConnectionFactory.getConnection();
     }
 
     @Override
-    public void insert(Account account) {
+    public void insert(Logs logs) {
         // question marks are placeholders for the real values:
-        String sql = "insert into account (username, accountid, balance) values (?, DEFAULT, ?);";
+        String sql = "insert into logs (type, accountid1, accountid2, amount, date) values (?, ?, ?, ?, DEFAULT);";
 
         try {
             // if anything goes wrong here, we will catch the exception:
@@ -29,14 +29,16 @@ public class AccountDaoImpl implements AccountDao{
             // we use our connection to prepare a statement to send to the database, pass in the string that we made, as well as a flag
             // that returns the generated keys (id)
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            // fill in the values with the data from our account object:
-            preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setDouble(3, account.getBalance());
+            // fill in the values with the data from our logs object:
+            preparedStatement.setString(1, logs.getType());
+            preparedStatement.setInt(2, logs.getAccountid1());
+            preparedStatement.setInt(3, logs.getAccountid2());
+            preparedStatement.setDouble(4, logs.getAmount());
             // now that our statement is prepared, we can execute it:
-            // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
+            // count is how many rows are affected (optimally we would have 1, we are inserting a single logs)
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
-                System.out.println("account added successfully!");
+                System.out.println("logs added successfully!");
                 // first, we get the result set
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 // increment to the first element of the result set
@@ -46,7 +48,7 @@ public class AccountDaoImpl implements AccountDao{
                 System.out.println("Generated id is: " + id);
             }
             else {
-                System.out.println("Something went wrong when adding the account!");
+                System.out.println("Something went wrong when adding the logs!");
             }
 
         } catch (SQLException e) {
@@ -56,23 +58,23 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public Account getAccountByName(String username) {
-        String sql = "select * from account where username = ?;";
+    public Logs getLogsByAccount1(int accountid1) {
+        String sql = "select * from logs where accountid1 = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setString(1, username);
+            preparedStatement.setInt(1, accountid1);
             ResultSet resultSet = preparedStatement.executeQuery();
-            // checking, do we have a account from this query
+            // checking, do we have a logs from this query
             if (resultSet.next()) {
                 // extract out the data
-                Account account = getAccount(resultSet);
+                Logs logs = getLogs(resultSet);
                 // probably don't need this conditional:
 //                if(idData != id) {
 //                    System.out.println("Something went wrong here. Id's don't match!");
 //                    return null;
 //                }
-                return account;
+                return logs;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,18 +83,23 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public Account getAccountByNumber(int number) {
-        String sql = "select * from account where accountid = ?;";
+    public Logs getLogsByAccount2(int accountid2) {
+        String sql = "select * from logs where accountid2 = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
-            preparedStatement.setInt(1, number);
+            preparedStatement.setInt(1, accountid2);
             ResultSet resultSet = preparedStatement.executeQuery();
-            // checking, do we have a account from this query
+            // checking, do we have a logs from this query
             if (resultSet.next()) {
                 // extract out the data
-                Account account = getAccount(resultSet);
-                return account;
+                Logs logs = getLogs(resultSet);
+                // probably don't need this conditional:
+//                if(idData != id) {
+//                    System.out.println("Something went wrong here. Id's don't match!");
+//                    return null;
+//                }
+                return logs;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,53 +108,62 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public List<Account> getAllAccounts() {
-        // create a list of accounts to store our results:
-        List<Account> accounts = new ArrayList<>();
-        String sql = "select * from account;";
+    public Logs getLogsByType(String type) {
+        String sql = "select * from logs where type = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // we don't need to set any parameters because we're getting all accounts:
+            // set the id using the id that we passed in:
+            preparedStatement.setString(1, type);
             ResultSet resultSet = preparedStatement.executeQuery();
-            // we use a while loop because there are multiple results:
-            while(resultSet.next()) {
-                Account account = getAccount(resultSet);
-                // add account to list of accounts
-                accounts.add(account);
+            // checking, do we have a logs from this query
+            if (resultSet.next()) {
+                // extract out the data
+                Logs logs = getLogs(resultSet);
+                // probably don't need this conditional:
+//                if(idData != id) {
+//                    System.out.println("Something went wrong here. Id's don't match!");
+//                    return null;
+//                }
+                return logs;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return accounts;
+        return null;
     }
 
-    public List<Account> getAllAccountsByName(String username) {
-        // create a list of accounts to store our results:
-        List<Account> accounts = new ArrayList<>();
-        String sql = "select * from account where username = ?;";
+
+    @Override
+    public List<Logs> getAllLogs() {
+        // create a list of logs to store our results:
+        List<Logs> logs = new ArrayList<>();
+        String sql = "select * from logs;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // we don't need to set any parameters because we're getting all accounts:
+            // we don't need to set any parameters because we're getting all logs:
             ResultSet resultSet = preparedStatement.executeQuery();
             // we use a while loop because there are multiple results:
             while(resultSet.next()) {
-                Account account = getAccount(resultSet);
-                // add account to list of accounts
-                accounts.add(account);
+                Logs log = getLogs(resultSet);
+                // add logs to list of logs
+                logs.add(log);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return accounts;
+        return logs;
     }
 
-    // get account from a result set:
-    public Account getAccount(ResultSet resultSet) {
+    // get logs from a result set:
+    public Logs getLogs(ResultSet resultSet) {
         try {
-            String username = resultSet.getString("username");
-            int accountNumber = resultSet.getInt("accountid");
-            double balance= resultSet.getDouble("balance");
-            return new Account(username, accountNumber, balance);
+            String type = resultSet.getString("type");
+            int accountid1 = resultSet.getInt("accountid1");
+            int accountid2 = resultSet.getInt("accountid2");
+            double amount = resultSet.getInt("amount");
+            String date = resultSet.getString("date");
+
+            return new Logs(type, accountid1, accountid2, amount, date);
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -155,27 +171,10 @@ public class AccountDaoImpl implements AccountDao{
     }
 
     @Override
-    public void update(Account account) {
-        String sql = "update account set username = ?, accountid = ?, balance = ?;";
+    public void delete(){
+        String sql = "delete from logs;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setInt(2, account.getAccountNumber());
-            preparedStatement.setDouble(3, account.getBalance());
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) System.out.println("Update successful!");
-            else System.out.println("Something went wrong with the update!");
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int accountid){
-        String sql = "delete from account where accountid = ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,accountid);
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
                 System.out.println("Deletion successful!");
@@ -187,9 +186,5 @@ public class AccountDaoImpl implements AccountDao{
         catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
     }
-
 }

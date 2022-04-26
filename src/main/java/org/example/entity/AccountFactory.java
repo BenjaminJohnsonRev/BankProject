@@ -12,17 +12,16 @@ public class AccountFactory {
         Scanner scanner = new Scanner(System.in);
         String accUsername = scanner.nextLine();
         System.out.println("Enter name of account owner: ");
-        int accountId = scanner.nextInt();
-        System.out.println("Enter the new account number: ");
         double balance = scanner.nextDouble();
         System.out.println("Enter starting balance of the account: ");
 
-        Account account = new Account(accUsername, accountId, balance);
+        Account account = new Account(accUsername, balance);
 
         if(application){
             AccApplicationsDao accApplicationsDao = DaoFactory.getAccApplicationsDao();
             accApplicationsDao.insert(account);
             System.out.println("New account application successfully created! It must be approved first.");
+
         } else {
             AccountDao accountDao = DaoFactory.getAccountDao();
             accountDao.insert(account);

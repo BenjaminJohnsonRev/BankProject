@@ -1,14 +1,14 @@
 package org.example.services;
 
-import org.example.dao.AccountDao;
-import org.example.dao.DaoFactory;
-import org.example.dao.PostDao;
+import org.example.dao.*;
 import org.example.entity.Account;
 import org.example.entity.Customer;
-import org.example.dao.CustomerDao;
+import org.example.entity.Logs;
 import org.example.entity.Post;
+import org.example.menus.CustomerMenu;
 
 import java.sql.SQLOutput;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.example.entity.AccountFactory.makeNewAccount;
@@ -16,7 +16,7 @@ import static org.example.entity.UserFactory.makeNewUser;
 
 public class CustomerService {
 
-
+    LogsDao logsDao = DaoFactory.getLogsDao();
 
     public void insertCustomer(){
         makeNewUser(false);
@@ -56,20 +56,61 @@ public class CustomerService {
     public void postReceive(Customer customer){
         String username = customer.getUsername();
         AccountDao accountDao = DaoFactory.getAccountDao();
-        accountDao.getAccountByName(username);
-
-        System.out.println("Here are that transfers that you can receive: ");
-
-        //TODO get ALL accounts with username into list, then iterate through list to find ALL posts with those account ids
-
-
-        int accountid2 =
-
-        PostDao postDao = DaoFactory.getPostDao();
-        System.out.println(postDao.getPostsByAccountid2(accountid2));
+        List<Account> accounts = accountDao.getAllAccountsByName(username);
 
 
 
+        if(accounts.size() > 0) {
+            System.out.println("Here are that transfers that you can receive: ");
+
+            for(int i = 0; i < accounts.size(); i++){
+                int accountid2 = accounts.get(i).getAccountNumber();
+                PostDao postDao = DaoFactory.getPostDao();
+                System.out.println(postDao.getAllPostsForAccount(accountid2));
+            }
+
+            System.out.println("Enter the id of the transfer you would like to receive: ");
+            Scanner scanner = new Scanner(System.in);
+            int id = scanner.nextInt();
+
+            PostDao postDao = DaoFactory.getPostDao();
+            Post post = postDao.getPostById(id);
+
+            int accountNumber2 = post.getAccountid2();
+            Account account2 = accountDao.getAccountByNumber(accountNumber2);
+
+            int accountNumber1 = post.getAccountid1();
+            Account account1 = accountDao.getAccountByNumber(accountNumber1);
+
+            double transfer = post.getTransfer();
+
+            double current = account1.getBalance();
+            double newBalance = current - transfer;
+
+
+
+            if(newBalance < 0){
+                System.out.println("Cannot complete transfer, insufficient funds in poster's account. ");
+
+            } else {
+                account1.setBalance(newBalance);
+                accountDao.update(account1);
+
+                current = account2.getBalance();
+                newBalance = current + transfer;
+                accountDao.update(account2);
+
+                //create log
+                logsDao.insert(new Logs("Transfer", accountNumber1, accountNumber2, transfer));
+
+                postDao.delete(id);
+
+                System.out.println("Transfer completed! New balance: " + newBalance);
+            }
+        } else {
+            System.out.println("There are no transfers posted to your accounts. ");
+
+        }
 
     }
 
@@ -99,6 +140,12 @@ public class CustomerService {
                 account.setBalance(newBalance);
                 AccountDao accountDao = DaoFactory.getAccountDao();
                 accountDao.update(account);
+
+                System.out.println("Deposit successful! New balance: " + newBalance);
+
+                //create log
+                logsDao.insert(new Logs("Deposit", account.getAccountNumber(), account.getAccountNumber(), deposit));
+
             } else{
                 System.out.println("You must deposit a positive amount.");
                 depositMoney(customer);
@@ -128,6 +175,10 @@ public class CustomerService {
                     account.setBalance(newBalance);
                     AccountDao accountDao = DaoFactory.getAccountDao();
                     accountDao.update(account);
+
+                    //create log
+                    logsDao.insert(new Logs("Withdrawal", account.getAccountNumber(), account.getAccountNumber(), withdrawal));
+
                 }
             } else{
                 System.out.println("You must withdraw a positive amount.");

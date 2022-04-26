@@ -4,18 +4,14 @@ import java.util.Random;
 
 public class Employee implements User {
 
-    String username;
-    String password;
+    private String username;
+    private String password;
 
     boolean employeeStatus = true;
 
     public Employee(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    @Override
-    public void login(String username, String password) {
     }
 
     public String getUsername() {
@@ -40,5 +36,11 @@ public class Employee implements User {
 
     public void setEmployeeStatus(boolean employeeStatus) {
         this.employeeStatus = employeeStatus;
+    }
+
+
+
+    @Override
+    public void login(String username, String password) {
     }
 }

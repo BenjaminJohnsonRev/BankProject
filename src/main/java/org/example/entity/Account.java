@@ -2,9 +2,14 @@ package org.example.entity;
 
 public class Account {
 
-    String accUsername;
-    int accountNumber;
-    double balance;
+    private String accUsername;
+    private int accountNumber;
+    private double balance;
+
+    public Account(String accUsername, double balance) {
+        this.accUsername = accUsername;
+        this.balance = balance;
+    }
 
 
     public Account(String accUsername, int accountNumber, double balance) {

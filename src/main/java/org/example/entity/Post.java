@@ -1,9 +1,17 @@
 package org.example.entity;
 
 public class Post {
-    int accountid1;
-    int accountid2;
-    double transfer;
+    private int id;
+    private int accountid1;
+    private int accountid2;
+    private double transfer;
+
+    public Post(int id, int accountid1, int accountid2, double transfer) {
+        this.id = id;
+        this.accountid1 = accountid1;
+        this.accountid2 = accountid2;
+        this.transfer = transfer;
+    }
 
     public Post(int accountid1, int accountid2, double transfer) {
         this.accountid1 = accountid1;

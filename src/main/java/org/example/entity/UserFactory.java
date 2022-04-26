@@ -3,6 +3,7 @@ package org.example.entity;
 
 import org.example.dao.CustomerDao;
 import org.example.dao.DaoFactory;
+import org.example.dao.EmployeeDao;
 import org.example.dao.EmployeeDaoImpl;
 
 import java.util.Random;
@@ -28,22 +29,17 @@ public class UserFactory {
                 Employee employee = new Employee(username, password);
                 System.out.println("New employee account created.");
 
+                EmployeeDao employeeDao = DaoFactory.getEmployeeDao();
+
+
             } else {
-//                boolean userIdUnavailable = false;
-//                int userId;
-//                do{
-//                    Random r = new Random();
-//                    userId = r.nextInt(10000);
-//                    userIdUnavailable = checkUnavailability(userId);
-//                } while (userIdUnavailable);
-//
                 Customer customer = new Customer(username, password);
 
                 CustomerDao customerDao = DaoFactory.getCustomerDao();
 
                 customerDao.insert(customer);
 
-                System.out.println("New customer account created.");
+                System.out.println("New customer account created. Log in to continue. ");
             }
         } else {
             System.out.println("Password does not match. ");
