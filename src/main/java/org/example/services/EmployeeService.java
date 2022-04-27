@@ -27,7 +27,7 @@ public class EmployeeService {
         Account account = accApplicationsDao.getAccountByNumber(accountid);
 
         AccountDao accountDao = DaoFactory.getAccountDao();
-        accountDao.insert(account);
+        accountDao.insertStoredProcedure(account);
 
         System.out.println("Application has been approved. Newly opened account is owned by: " + account.getAccUsername() + " and has a balance of " + account.getBalance());
 

@@ -2,10 +2,7 @@ package org.example.dao;
 
 import org.example.entity.Account;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +45,40 @@ public class AccountDaoImpl implements AccountDao{
             else {
                 System.out.println("Something went wrong when adding the account!");
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void insertStoredProcedure(Account account) {
+        // question marks are placeholders for the real values:
+        String sql = "call insert_account (?::varchar , ?::numeric);";
+
+        try {
+            // if anything goes wrong here, we will catch the exception:
+
+            // we use our connection to prepare a statement to send to the database, pass in the string that we made, as well as a flag
+            // that returns the generated keys (id)
+            CallableStatement preparedStatement = connection.prepareCall(sql);
+            // fill in the values with the data from our account object:
+            preparedStatement.setString(1, account.getAccUsername());
+            preparedStatement.setDouble(2, account.getBalance());
+            // now that our statement is prepared, we can execute it:
+            // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            if(resultSet.next()) {
+//                System.out.println("account added successfully!");
+//                // extract the id from the result set
+//                int accountid = resultSet.getInt(2);
+//                System.out.println("Generated account number is: " + accountid);
+//            }
+//            else {
+//                System.out.println("Something went wrong when adding the account!");
+//            }
+            System.out.println("account added successfully!");
 
         } catch (SQLException e) {
             e.printStackTrace();

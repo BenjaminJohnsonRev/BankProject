@@ -3,7 +3,7 @@ package org.example;
 public class ProjectDescription {
 
     //Next TODO
-    //Create logs, create tests (including dummy tables that auto create/delete themselves), incorporate stored procedure, finish user functions
+    //incorporate stored procedure
 
 
 
@@ -26,16 +26,16 @@ public class ProjectDescription {
     // 6. Log4j is implemented to log events to a file.
     // 7. A minimum of one (1) JUnit test is written to test some functionality.
     // ## User Stories
-    // * As a user, I can login.
-    // * As a user, I can register for a customer account.
+    // * As a user, I can login. X
+    // * As a user, I can register for a customer account. X
     // * As a customer, I can post a money transfer to another account. X
     // * As a customer, I can accept a money transfer from another account. X
-    // * As a customer, I can apply for a new bank account with a starting balance.
-    // * As a customer, I can view the balance of a specific account.
-    // * As a customer, I can make a withdrawal or deposit to a specific account.
-    // * As the system, I reject invalid transactions.
+    // * As a customer, I can apply for a new bank account with a starting balance. X
+    // * As a customer, I can view the balance of a specific account. X
+    // * As a customer, I can make a withdrawal or deposit to a specific account. X
+    // * As the system, I reject invalid transactions. X
     // * Ex: * A withdrawal that would result in a negative balance. * A deposit or withdrawal of negative money.
-    // * As an employee, I can approve or reject an account.
-    // * As an employee, I can view a customer's bank accounts.
-    // * As an employee, I can view a log of all transactions.
+    // * As an employee, I can approve or reject an account. X
+    // * As an employee, I can view a customer's bank accounts. X
+    // * As an employee, I can view a log of all transactions. X
 }

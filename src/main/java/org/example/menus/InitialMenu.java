@@ -15,7 +15,7 @@ public class InitialMenu{
         System.out.println("Select an option: ");
         System.out.println("1: Log in as an existing customer ");
         System.out.println("2: Log in as an employee ");
-        System.out.println("3: Register as a new user ");
+        System.out.println("3: Register as a new customer ");
         System.out.println("4: Quit ");
 
         Scanner scanner = new Scanner(System.in);

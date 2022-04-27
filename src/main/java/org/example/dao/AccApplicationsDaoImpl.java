@@ -142,7 +142,7 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
             preparedStatement.setInt(1,accountid);
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
-                System.out.println("Deletion successful!");
+                System.out.println("Application deletion successful!");
             }
             else {
                 System.out.println("Something went wrong with the deletion!");
