@@ -48,7 +48,7 @@ public class Account {
                 "AccUsername='" + accUsername + '\'' +
                 ", accountNumber=" + accountNumber +
                 ", balance=" + balance +
-                '}';
+                '}' + '\n';
     }
 }
 

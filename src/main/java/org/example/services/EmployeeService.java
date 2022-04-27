@@ -47,6 +47,23 @@ public class EmployeeService {
 
     }
 
+    public void viewCustomerAccounts(){
+        AccountDao accountDao = DaoFactory.getAccountDao();
+
+        System.out.println("Enter the username you would like to see the accounts of: ");
+        Scanner scanner = new Scanner(System.in);
+        String username = scanner.nextLine();
+
+        System.out.println(accountDao.getAllAccountsByName(username));
+
+
+    }
+
+    public void viewAllAccounts(){
+        AccountDao accountDao = DaoFactory.getAccountDao();
+        System.out.println(accountDao.getAllAccounts());
+    }
+
     public void viewLogs(){
 
         System.out.println("Logs: ");

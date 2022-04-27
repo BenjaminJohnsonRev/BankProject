@@ -58,6 +58,6 @@ public class Post {
                 ", accountid1=" + accountid1 +
                 ", accountid2=" + accountid2 +
                 ", transfer=" + transfer +
-                '}';
+                '}' + '\n';
     }
 }

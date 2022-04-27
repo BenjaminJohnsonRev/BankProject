@@ -18,7 +18,9 @@ public class EmployeeMenu implements Menu {
         System.out.println("2: Approve account application ");
         System.out.println("3: Deny account application ");
         System.out.println("4: View all logs ");
-        System.out.println("5: Log out ");
+        System.out.println("5: View accounts for a specified user ");
+        System.out.println("6: View all user accounts ");
+        System.out.println("7: Log out ");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
@@ -37,11 +39,17 @@ public class EmployeeMenu implements Menu {
                 employeeService.viewLogs();
                 break;
             case 5:
+                employeeService.viewCustomerAccounts();
+                break;
+            case 6:
+                employeeService.viewAllAccounts();
+                break;
+            case 7:
                 System.out.println("You have logged out.");
                 loggedIn = false;
                 break;
             default:
-                System.out.println("You must enter a number (1-5) from the menu. Enter 5 to log out. ");
+                System.out.println("You must enter a number (1-7) from the menu. Enter 7 to log out. ");
                 break;
         }
 
