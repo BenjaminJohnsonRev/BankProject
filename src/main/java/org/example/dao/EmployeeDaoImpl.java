@@ -35,20 +35,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             preparedStatement.setString(2, employee.getPassword());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single employee)
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) {
-                System.out.println("employee added successfully!");
-                // first, we get the result set
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                // increment to the first element of the result set
-                resultSet.next();
-                // extract the id from the result set
-                int id = resultSet.getInt(1);
-                System.out.println("Generated id is: " + id);
-            }
-            else {
-                System.out.println("Something went wrong when adding the employee!");
-            }
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

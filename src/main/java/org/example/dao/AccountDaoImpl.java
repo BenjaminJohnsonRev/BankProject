@@ -31,7 +31,7 @@ public class AccountDaoImpl implements AccountDao{
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // fill in the values with the data from our account object:
             preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setDouble(3, account.getBalance());
+            preparedStatement.setDouble(2, account.getBalance());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
             int count = preparedStatement.executeUpdate();
@@ -42,8 +42,8 @@ public class AccountDaoImpl implements AccountDao{
                 // increment to the first element of the result set
                 resultSet.next();
                 // extract the id from the result set
-                int id = resultSet.getInt(1);
-                System.out.println("Generated id is: " + id);
+                int accountid = resultSet.getInt(2);
+                System.out.println("Generated account number is: " + accountid);
             }
             else {
                 System.out.println("Something went wrong when adding the account!");
@@ -127,7 +127,7 @@ public class AccountDaoImpl implements AccountDao{
         String sql = "select * from account where username = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            // we don't need to set any parameters because we're getting all accounts:
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             // we use a while loop because there are multiple results:
             while(resultSet.next()) {
@@ -156,12 +156,12 @@ public class AccountDaoImpl implements AccountDao{
 
     @Override
     public void update(Account account) {
-        String sql = "update account set username = ?, accountid = ?, balance = ?;";
+        String sql = "update account set username = ?, balance = ? where accountid = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setInt(2, account.getAccountNumber());
-            preparedStatement.setDouble(3, account.getBalance());
+            preparedStatement.setInt(3, account.getAccountNumber());
+            preparedStatement.setDouble(2, account.getBalance());
             int count = preparedStatement.executeUpdate();
             if(count == 1) System.out.println("Update successful!");
             else System.out.println("Something went wrong with the update!");
@@ -187,8 +187,6 @@ public class AccountDaoImpl implements AccountDao{
         catch (SQLException e) {
             e.printStackTrace();
         }
-
-
 
     }
 

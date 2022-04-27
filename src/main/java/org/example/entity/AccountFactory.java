@@ -10,10 +10,12 @@ public class AccountFactory {
 
     public static void makeNewAccount(boolean application){
         Scanner scanner = new Scanner(System.in);
-        String accUsername = scanner.nextLine();
+
         System.out.println("Enter name of account owner: ");
-        double balance = scanner.nextDouble();
+        String accUsername = scanner.nextLine();
+
         System.out.println("Enter starting balance of the account: ");
+        double balance = scanner.nextDouble();
 
         Account account = new Account(accUsername, balance);
 

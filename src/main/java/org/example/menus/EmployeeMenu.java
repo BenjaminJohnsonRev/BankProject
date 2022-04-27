@@ -4,7 +4,6 @@ import org.example.entity.Employee;
 import org.example.entity.User;
 import org.example.services.EmployeeService;
 
-import java.lang.runtime.SwitchBootstraps;
 import java.util.Scanner;
 
 public class EmployeeMenu implements Menu {

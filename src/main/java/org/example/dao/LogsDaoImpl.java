@@ -44,8 +44,8 @@ public class LogsDaoImpl implements LogsDao{
                 // increment to the first element of the result set
                 resultSet.next();
                 // extract the id from the result set
-                int id = resultSet.getInt(1);
-                System.out.println("Generated id is: " + id);
+                String time = resultSet.getString(5);
+                System.out.println("Generated log time is: " + time);
             }
             else {
                 System.out.println("Something went wrong when adding the logs!");

@@ -18,6 +18,11 @@ public class CustomerService {
 
     LogsDao logsDao = DaoFactory.getLogsDao();
 
+    public void viewMyAccounts(Customer customer){
+        AccountDao accountDao = DaoFactory.getAccountDao();
+        System.out.println(accountDao.getAllAccountsByName(customer.getUsername()));
+    }
+
     public void insertCustomer(){
         makeNewUser(false);
     }
@@ -58,11 +63,11 @@ public class CustomerService {
         AccountDao accountDao = DaoFactory.getAccountDao();
         List<Account> accounts = accountDao.getAllAccountsByName(username);
 
-
-
+        //checks if any accounts exist for this user
         if(accounts.size() > 0) {
             System.out.println("Here are that transfers that you can receive: ");
 
+            //iterates through list of receivable posts for each account this user owns
             for(int i = 0; i < accounts.size(); i++){
                 int accountid2 = accounts.get(i).getAccountNumber();
                 PostDao postDao = DaoFactory.getPostDao();
@@ -162,7 +167,7 @@ public class CustomerService {
         Account account = getAccountNumber();
 
         if (compareUsernames(customer, account)){
-            System.out.println("Enter the amount you would like to deposit: ");
+            System.out.println("Enter the amount you would like to withdraw: ");
             Scanner scanner = new Scanner(System.in);
             double withdrawal = scanner.nextDouble();
             if(withdrawal> 0) {
@@ -175,6 +180,8 @@ public class CustomerService {
                     account.setBalance(newBalance);
                     AccountDao accountDao = DaoFactory.getAccountDao();
                     accountDao.update(account);
+
+                    System.out.println("Withdrawal successful! New balance: " + newBalance);
 
                     //create log
                     logsDao.insert(new Logs("Withdrawal", account.getAccountNumber(), account.getAccountNumber(), withdrawal));

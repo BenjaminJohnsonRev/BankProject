@@ -19,6 +19,14 @@ public class Post {
         this.transfer = transfer;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getAccountid1() {
         return accountid1;
     }
@@ -46,7 +54,8 @@ public class Post {
     @Override
     public String toString() {
         return "Post{" +
-                "accountid1=" + accountid1 +
+                "id=" + id +
+                ", accountid1=" + accountid1 +
                 ", accountid2=" + accountid2 +
                 ", transfer=" + transfer +
                 '}';

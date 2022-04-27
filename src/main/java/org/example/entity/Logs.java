@@ -70,6 +70,6 @@ public class Logs {
                 ", accountid2=" + accountid2 +
                 ", amount=" + amount +
                 ", date='" + date + '\'' +
-                '}';
+                '}' + '\n';
     }
 }

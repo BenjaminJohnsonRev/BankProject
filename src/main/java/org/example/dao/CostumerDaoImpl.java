@@ -34,20 +34,7 @@ public class CostumerDaoImpl implements CustomerDao{
             preparedStatement.setString(2, customer.getPassword());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single customer)
-            int count = preparedStatement.executeUpdate();
-            if(count == 1) {
-                System.out.println("customer added successfully!");
-                // first, we get the result set
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                // increment to the first element of the result set
-                resultSet.next();
-                // extract the id from the result set
-                int id = resultSet.getInt(1);
-                System.out.println("Generated id is: " + id);
-            }
-            else {
-                System.out.println("Something went wrong when adding the customer!");
-            }
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

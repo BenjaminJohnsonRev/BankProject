@@ -1,6 +1,5 @@
 package org.example.services;
 
-import com.sun.tools.jdeprscan.scan.Scan;
 import org.example.dao.AccApplicationsDao;
 import org.example.dao.AccountDao;
 import org.example.dao.DaoFactory;

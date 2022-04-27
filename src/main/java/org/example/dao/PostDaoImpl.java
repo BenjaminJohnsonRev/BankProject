@@ -22,7 +22,7 @@ public class PostDaoImpl implements PostDao{
     @Override
     public void insert(Post post) {
         // question marks are placeholders for the real values:
-        String sql = "insert into account (id, accountid1, accountid2, transfer) values (DEFAULT, ?, ?, ?);";
+        String sql = "insert into post (id, accountid1, accountid2, transfer) values (DEFAULT, ?, ?, ?);";
 
         try {
             // if anything goes wrong here, we will catch the exception:
@@ -38,7 +38,7 @@ public class PostDaoImpl implements PostDao{
             // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
             int count = preparedStatement.executeUpdate();
             if(count == 1) {
-                System.out.println("account added successfully!");
+                System.out.println("Posting added successfully!");
                 // first, we get the result set
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 // increment to the first element of the result set
@@ -48,7 +48,7 @@ public class PostDaoImpl implements PostDao{
                 System.out.println("Generated id is: " + id);
             }
             else {
-                System.out.println("Something went wrong when adding the account!");
+                System.out.println("Something went wrong when adding the post!");
             }
 
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public class PostDaoImpl implements PostDao{
 
     @Override
     public Post getPostById(int id) {
-        String sql = "select * from account where id = ?;";
+        String sql = "select * from post where id = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
@@ -79,7 +79,7 @@ public class PostDaoImpl implements PostDao{
 
     @Override
     public Post getPostByAccountid2(int accountid2) {
-        String sql = "select * from account where accountid = ?;";
+        String sql = "select * from post where accountid2 = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // set the id using the id that we passed in:
@@ -148,7 +148,7 @@ public class PostDaoImpl implements PostDao{
             int accountid1 = resultSet.getInt("accountid1");
             int accountid2= resultSet.getInt("accountid2");
             double transfer = resultSet.getDouble("transfer");
-            return new Post(accountid1, accountid2, transfer);
+            return new Post(id, accountid1, accountid2, transfer);
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -157,7 +157,7 @@ public class PostDaoImpl implements PostDao{
 
     @Override
     public void delete(int id){
-        String sql = "delete from account where id = ?;";
+        String sql = "delete from post where id = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,id);

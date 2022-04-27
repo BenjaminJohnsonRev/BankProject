@@ -17,20 +17,23 @@ public class UserFactory {
     public static void makeNewUser(boolean employeeStatus){
 
         Scanner scanner = new Scanner(System.in);
-        String username = scanner.nextLine();
+
         System.out.println("Enter new username: ");
-        String password = scanner.nextLine();
+        String username = scanner.nextLine();
+
         System.out.println("Enter new password: ");
-        String passwordConfirm = scanner.nextLine();
+        String password = scanner.nextLine();
+
         System.out.println("Confirm new password: ");
+        String passwordConfirm = scanner.nextLine();
 
         if(password.equals(passwordConfirm)){
             if (employeeStatus){
                 Employee employee = new Employee(username, password);
+
                 System.out.println("New employee account created.");
 
                 EmployeeDao employeeDao = DaoFactory.getEmployeeDao();
-
 
             } else {
                 Customer customer = new Customer(username, password);

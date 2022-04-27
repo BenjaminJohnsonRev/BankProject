@@ -31,7 +31,7 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             // fill in the values with the data from our account object:
             preparedStatement.setString(1, account.getAccUsername());
-            preparedStatement.setDouble(3, account.getBalance());
+            preparedStatement.setDouble(2, account.getBalance());
             // now that our statement is prepared, we can execute it:
             // count is how many rows are affected (optimally we would have 1, we are inserting a single account)
             int count = preparedStatement.executeUpdate();
@@ -42,8 +42,8 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
                 // increment to the first element of the result set
                 resultSet.next();
                 // extract the id from the result set
-                int id = resultSet.getInt(1);
-                System.out.println("Generated id is: " + id);
+                int accountid = resultSet.getInt(2);
+                System.out.println("Generated application number is: " + accountid);
             }
             else {
                 System.out.println("Something went wrong when adding the account!");
@@ -136,7 +136,7 @@ public class AccApplicationsDaoImpl implements AccApplicationsDao{
 
     @Override
     public void delete(int accountid){
-        String sql = "delete from account where accountid = ?;";
+        String sql = "delete from accapplications where accountid = ?;";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,accountid);
