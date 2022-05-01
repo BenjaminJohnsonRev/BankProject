@@ -1,0 +1,32 @@
+reuse:
+login service
+userfactory entity
+-add unique ids to employees
+logsDaoImpl dao for tickets
+AccApplicationsDaoImpl dao for pending tickets
+postTranser method from Haruya for logs/transactions
+
+
+create:
+ticket factory
+-user, price, description, date, foreign key(user ids)/username
+check if get all works for ordered by date
+90% test coverage
+
+time budget:
+do before weekend-
+non-data layer 3 hours~
+code review previous project 1 hour~
+pre-postman data layer 2 hours~
+new technology 2 hours per technology~
+tests 2 hours~
+do next weekend-
+debugging 4 hours~
+
+splitting up work:
+Ben does users
+Haruya does tickets
+
+
+
+
